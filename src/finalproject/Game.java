@@ -67,7 +67,6 @@ public class Game {
             for (int j = 0; j < col; j++) {
                 NewButton btn=allButtons.get(solution.indexOf(new Point(j, i)));//берем кнопку с текущими координатами
                 FinalProject.root.add(btn.getBtn(), j, i);//добавляем кнопку в узел
-                //System.out.println(solution.indexOf(new Point(j, i)));
             }
         }
     }
@@ -81,7 +80,6 @@ public class Game {
             I=allButtons.get(i).rightLocation.x*col+allButtons.get(i).rightLocation.y;
             J=allButtons.get(j).rightLocation.x*col+allButtons.get(j).rightLocation.y;
             if (I<J)
-              System.out.println(allButtons.get(i).rightLocation+"<"+allButtons.get(j).rightLocation);
               countInversions++;
           }
         }
