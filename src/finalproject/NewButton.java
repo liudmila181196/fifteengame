@@ -10,6 +10,9 @@ import javafx.scene.input.MouseEvent;
 import java.util.Collections;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextInputDialog;
+import java.util.Optional;
+import java.io.*;
 
 public class NewButton {
 
@@ -20,20 +23,31 @@ public class NewButton {
     private boolean isEmptyButton;//логическая переменнная для идентификации пустой кнопки
     private Button btn;//кнопка
     public final Point rightLocation;//правильные координаты кнопки
-    public int number;
     
     public NewButton(int col, int row){//конструктор пустой кнопки
         btn=new Button();
+        btn.setStyle(FinalProject.styleGame);
         this.setEmptyButton();//идентификатор пустой кнопки true
         rightLocation=new Point (col, row);//запоминаем координаты
-        number=col*col+row;
         interactions();
     }
     
-    public NewButton(Image img, int col, int row) {
+    public NewButton(Image img, int col, int row) {//конструктор кнопки с изображением
         btn=new Button();
         isEmptyButton = false;//идентификатор пустой кнопки false
-        btn.setGraphic(new ImageView(img));//фоном кнопки будет кусочек изображения
+        ImageView iv=new ImageView(img);
+        iv.setFitHeight(FinalProject.BTN_GAME_SIZE);
+        iv.setFitWidth(FinalProject.BTN_GAME_SIZE);
+        btn.setGraphic(iv);//фоном кнопки будет кусочек изображения
+        rightLocation=new Point (col, row);//запоминаем координаты
+        interactions();
+    }
+    
+    public NewButton(int col, int row, int number){
+        btn=new Button();
+        isEmptyButton = false;//идентификатор пустой кнопки false
+        btn.setText(Integer.toString(number));
+        btn.setStyle(FinalProject.styleGame);
         rightLocation=new Point (col, row);//запоминаем координаты
         interactions();
     }
@@ -57,6 +71,8 @@ public class NewButton {
                     || (btnIndex - Game.getCol() == emptyIndex) || (btnIndex + Game.getCol() == emptyIndex)) {
                 Collections.swap(buttons, btnIndex, emptyIndex);//то меняем кнопки друг с другом
                 update();
+                FinalProject.clicks++;
+                FinalProject.currentScore.setText("Число ходов: "+String.valueOf(FinalProject.clicks));
             }
         });
         
@@ -64,13 +80,13 @@ public class NewButton {
     
     private void update() {//обновляем поле
 
-            FinalProject.root.getChildren().clear();//очищаем корневой узел
+            FinalProject.game.getChildren().clear();//очищаем корневой узел
             ArrayList<NewButton> buttons=Game.getAllButtons();//лист всех кнопок
             
             for (int i = 0; i < Game.getRow(); i++) {//идем по строкам
                 for (int j = 0; j < Game.getCol(); j++) {//идем по столбцам
                     NewButton btn=buttons.get(Game.getSolution().indexOf(new Point(j, i)));//берем кнопку с текущими координатами
-                    FinalProject.root.add(btn.getBtn(), j, i);//добавляем в узел
+                    FinalProject.game.add(btn.getBtn(), j, i);//добавляем в узел
                 }
             }
             check();
@@ -88,17 +104,20 @@ public class NewButton {
                 }
         }
         if (current.equals(Game.getSolution())) {//если порядок правильных координат верен
-            showAlert();//показываем сообщение
+            //showAlert();//показываем сообщение
+            Records rec = new Records();
+            rec.newRecord();
         }
     }
-    
+    /*
     private void showAlert() {//сообщение
         Alert alert = new Alert(AlertType.INFORMATION);//создаем окно сообщения
         alert.setTitle("Congratulations!");//название окна
         alert.setHeaderText(null);//без заголовка
         alert.setContentText("Congratulations! You win!");//добавляем сообщение
         alert.showAndWait();//показываем сообщение
-    }
+        
+    }*/
     
     public void setEmptyButton() {//пустая кнопка
         isEmptyButton = true;
