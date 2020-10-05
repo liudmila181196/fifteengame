@@ -19,7 +19,7 @@ public class SplitPicture {
     public SplitPicture(int columns, int rows){
         
         try{
-            image=new Image(getClass().getResource("Images/BigWave.jpg").toString());//загружаем изображение
+            image=new Image(getClass().getResource("Images/"+FinalProject.imageName).toString());//загружаем изображение
             width=(int)image.getWidth();//ширина изображения
             height=(int)image.getHeight();//высота изображения
             } catch (Exception e) {//ловим ошибку
