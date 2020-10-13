@@ -13,14 +13,6 @@ public class Game {
         return solution;
     }
 
-    public static int getCol() {
-        return col;
-    }
-
-    public static int getRow() {
-        return row;
-    }
-
     public static ArrayList<NewButton> getAllButtons() {
         return allButtons;
     }
@@ -29,24 +21,24 @@ public class Game {
     private NewButton emptyButton;//пустая кнопка
     private static ArrayList<Point> solution=new ArrayList<>();//лист с порядком координат
     private SplitPicture splitPicture;//изображение
-    private static int col;//кол-во столбцов
-    private static int row;//кол-во строк
     
-    public Game(int columns, int rows, boolean isNumeric){
-        col=columns;
-        row=rows;
+    public Game(){
+        solution.clear();
+        splitPicture = null;
+        allButtons.clear();
         
-        for(int i=0; i<row;i++){
-            for (int j=0; j<col; j++){
+        
+        for(int i=0; i<FinalProject.size;i++){
+            for (int j=0; j<FinalProject.size; j++){
                 solution.add(new Point(j, i));//создаем лист координат
             }
         }
-        if (isNumeric){
+        if (FinalProject.isNumeric){
             int number=0;
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < col; j++) {
+            for (int i = 0; i < FinalProject.size; i++) {
+                for (int j = 0; j < FinalProject.size; j++) {
                     number++;
-                    if (i==row-1 && j==col-1){//если это последняя кнопка
+                    if (i==FinalProject.size-1 && j==FinalProject.size-1){//если это последняя кнопка
                         emptyButton = new NewButton(j, i);//создаем пустую кнопку с текущими координатами
                         emptyButton.getBtn().setMinSize(FinalProject.BTN_GAME_SIZE, FinalProject.BTN_GAME_SIZE);//задаем размер кнопки
                         allButtons.add(emptyButton);//добавляем в лист
@@ -60,12 +52,12 @@ public class Game {
             }
         }
         else{
-            splitPicture=new SplitPicture(col, row);//создаем изображение
+            splitPicture=new SplitPicture(FinalProject.size, FinalProject.size);//создаем изображение
         
-            for (int i = 0; i < row; i++) {
-                for (int j = 0; j < col; j++) {
+            for (int i = 0; i < FinalProject.size; i++) {
+                for (int j = 0; j < FinalProject.size; j++) {
                     Image img=splitPicture.getListOfImage().get(solution.indexOf(new Point(j, i)));//берем кусочек изображения с текущими координатами
-                    if (i==row-1 && j==col-1){//если это последняя кнопка
+                    if (i==FinalProject.size-1 && j==FinalProject.size-1){//если это последняя кнопка
                         emptyButton = new NewButton(j, i);//создаем пустую кнопку с текущими координатами
                         emptyButton.getBtn().setMinSize(FinalProject.BTN_GAME_SIZE+16, FinalProject.BTN_GAME_SIZE+8);//задаем размер кнопки
                         allButtons.add(emptyButton);//добавляем в лист
@@ -82,14 +74,7 @@ public class Game {
         //перемешиваем кнопки
         do{
             Collections.shuffle(allButtons.subList(0, allButtons.size()-1));
-        }while(!isSolvable());
-        
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                NewButton btn=allButtons.get(solution.indexOf(new Point(j, i)));//берем кнопку с текущими координатами
-                FinalProject.game.add(btn.getBtn(), j, i);//добавляем кнопку в узел
-            }
-        }
+        }while(!isSolvable());   
     }
     
     //Проверка на решаемость
@@ -100,10 +85,10 @@ public class Game {
     private boolean isSolvable() {
         int countInversions = 0;
         int I=0, J=0;
-        for (int i = 0; i < col*row-1; i++) {
+        for (int i = 0; i < Math.pow(FinalProject.size, 2); i++) {
           for (int j = 0; j < i; j++) {
-            I=allButtons.get(i).rightLocation.y*col+allButtons.get(i).rightLocation.x;
-            J=allButtons.get(j).rightLocation.y*col+allButtons.get(j).rightLocation.x;
+            I=allButtons.get(i).rightLocation.y*FinalProject.size+allButtons.get(i).rightLocation.x;
+            J=allButtons.get(j).rightLocation.y*FinalProject.size+allButtons.get(j).rightLocation.x;
             if (I<J)
               countInversions++;
           }

@@ -67,9 +67,28 @@ public class NewButton {
                 }
             }
             //если (индекс нажатой - или +1) равен индексу пустой или если (индекс нажатой - или + кол-во кнопок в строке(столбцов)) равен индексу пустой
-            if ((btnIndex - 1 == emptyIndex) || (btnIndex + 1 == emptyIndex)
-                    || (btnIndex - Game.getCol() == emptyIndex) || (btnIndex + Game.getCol() == emptyIndex)) {
-                Collections.swap(buttons, btnIndex, emptyIndex);//то меняем кнопки друг с другом
+             if (btnIndex/FinalProject.size == emptyIndex/FinalProject.size ){
+                if (btnIndex<emptyIndex) 
+                    for (int i=btnIndex; i<emptyIndex;i++){
+                        Collections.swap(buttons, i, emptyIndex);//то меняем кнопки друг с другом
+                    }
+                else 
+                    for (int i=btnIndex; i>emptyIndex;i--){
+                        Collections.swap(buttons, i, emptyIndex);//то меняем кнопки друг с другом
+                    }
+                update();
+                FinalProject.clicks++;
+                FinalProject.currentScore.setText("Число ходов: "+String.valueOf(FinalProject.clicks));
+            }
+            else if ((Math.abs(btnIndex - emptyIndex))% FinalProject.size== 0){
+                if (btnIndex<emptyIndex) 
+                    for (int i=btnIndex; i<emptyIndex;i+=FinalProject.size){
+                        Collections.swap(buttons, i, emptyIndex);//то меняем кнопки друг с другом
+                    }
+                else 
+                    for (int i=btnIndex; i>emptyIndex;i-=FinalProject.size){
+                        Collections.swap(buttons, i, emptyIndex);//то меняем кнопки друг с другом
+                    }
                 update();
                 FinalProject.clicks++;
                 FinalProject.currentScore.setText("Число ходов: "+String.valueOf(FinalProject.clicks));
@@ -80,13 +99,13 @@ public class NewButton {
     
     private void update() {//обновляем поле
 
-            FinalProject.game.getChildren().clear();//очищаем корневой узел
+            FinalProject.gameField.getChildren().clear();//очищаем корневой узел
             ArrayList<NewButton> buttons=Game.getAllButtons();//лист всех кнопок
             
-            for (int i = 0; i < Game.getRow(); i++) {//идем по строкам
-                for (int j = 0; j < Game.getCol(); j++) {//идем по столбцам
+            for (int i = 0; i < FinalProject.size; i++) {//идем по строкам
+                for (int j = 0; j < FinalProject.size; j++) {//идем по столбцам
                     NewButton btn=buttons.get(Game.getSolution().indexOf(new Point(j, i)));//берем кнопку с текущими координатами
-                    FinalProject.game.add(btn.getBtn(), j, i);//добавляем в узел
+                    FinalProject.gameField.add(btn.getBtn(), j, i);//добавляем в узел
                 }
             }
             check();
@@ -97,8 +116,8 @@ public class NewButton {
         ArrayList<Point> current = new ArrayList<>();//лист с правильными координатами кнопок в текущем положении
         ArrayList<NewButton> buttons=Game.getAllButtons();//лист с кнопками
         
-        for (int i = 0; i < Game.getRow(); i++) {//идем по строкам
-                for (int j = 0; j < Game.getCol(); j++) {//идем по столбцам
+        for (int i = 0; i < FinalProject.size; i++) {//идем по строкам
+                for (int j = 0; j < FinalProject.size; j++) {//идем по столбцам
                     NewButton btn=buttons.get(Game.getSolution().indexOf(new Point(j, i)));//берем кнопку с текущими координатами
                     current.add((Point) btn.rightLocation);//добавляем в лист правильные координаты кнопок в текущем порядке
                 }
